@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tiempo</string>
+
+    <!-- Navegación -->
+    <string name="nav_home">Inicio</string>
+    <string name="nav_life_panel">Tiempo de vida</string>
+    <string name="nav_goals">Objetivos</string>
+    <string name="nav_history">Historial</string>
+    <string name="nav_settings">Configuración</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">Haz visible tu tiempo</string>
+    <string name="onboarding_subtitle">Empecemos con dos datos. Podrás ajustarlos después.</string>
+    <string name="onboarding_birth_date_label">Fecha de nacimiento</string>
+    <string name="onboarding_birth_date_placeholder">Selecciona una fecha</string>
+    <string name="onboarding_reference_age_label">Edad de referencia</string>
+    <string name="onboarding_reference_age_value">%1$d años</string>
+    <string name="onboarding_reference_age_unit">años</string>
+    <string name="onboarding_reference_age_range">Entre %1$d y %2$d años</string>
+    <string name="onboarding_reference_age_hint">La usaremos solo como referencia visual.</string>
+    <string name="onboarding_estimate_notice">Estimación visual, no una predicción de esperanza de vida.</string>
+    <string name="onboarding_submit">Comenzar</string>
+    <string name="onboarding_saving">Guardando…</string>
+    <string name="onboarding_date_picker_title">Fecha de nacimiento</string>
+    <string name="action_confirm">Confirmar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="cd_pick_birth_date">Elegir fecha de nacimiento</string>
+    <string name="cd_loading">Cargando</string>
+
+    <!-- Errores de validación -->
+    <string name="error_birth_date_missing">Selecciona tu fecha de nacimiento.</string>
+    <string name="error_birth_date_in_future">La fecha no puede estar en el futuro.</string>
+    <string name="error_birth_date_too_old">Introduce una fecha posterior a 1900.</string>
+    <string name="error_reference_age_out_of_range">La edad de referencia debe estar entre 50 y 120 años.</string>
+    <string name="error_reference_age_not_above_current_age">La edad de referencia debe ser mayor que tu edad actual.</string>
+    <string name="error_sleep_window_invalid">La hora de dormir y la de despertar deben ser distintas.</string>
+    <string name="error_unknown">No se pudo guardar el perfil. Inténtalo de nuevo.</string>
+
+    <!-- Inicio -->
+    <string name="home_title">Inicio</string>
+    <string name="home_subtitle">Tu punto de partida.</string>
+    <string name="home_profile_section">Tu perfil</string>
+    <string name="home_birth_date_label">Nacimiento</string>
+    <string name="home_reference_age_label">Edad de referencia</string>
+    <string name="home_rest_label">Descanso</string>
+    <string name="home_rest_value">%1$s – %2$s</string>
+    <string name="home_estimate_notice">La edad de referencia es una estimación visual, no una predicción de esperanza de vida.</string>
+    <string name="home_loading_profile">Cargando tu perfil…</string>
+    <string name="home_next_section_title">Panel de vida</string>
+    <string name="home_next_section_body">En la siguiente fase verás aquí tu tiempo en años, meses, semanas, días y horas.</string>
+
+    <!-- Pantallas pendientes -->
+    <string name="placeholder_life_panel">Aquí verás tu tiempo de vida en años, meses, semanas, días y horas.</string>
+    <string name="placeholder_goals">Tus objetivos y actividades diarias y semanales.</string>
+    <string name="placeholder_history">Tu historial, seguimiento y evolución.</string>
+    <string name="placeholder_settings">Perfil, preferencias y notificaciones.</string>
+    <string name="placeholder_phase_note">Disponible en la siguiente fase</string>
+
+    <string name="scale_years">Años</string>
+    <string name="scale_months">Meses</string>
+    <string name="scale_weeks">Semanas</string>
+    <string name="scale_days">Días</string>
+    <string name="scale_hours">Horas</string>
+    <string name="life_panel_disclaimer">Estimación visual basada en tu edad de referencia, no una predicción.</string>
+    <string name="life_panel_beyond">Ya recorriste más que tu edad de referencia. Cada día es un regalo; puedes ajustarla en Configuración.</string>
+    <string name="life_panel_percent">%1$d %% transcurrido</string>
+    <string name="life_panel_no_profile">Completa tu perfil para ver tu tiempo.</string>
+</resources>
