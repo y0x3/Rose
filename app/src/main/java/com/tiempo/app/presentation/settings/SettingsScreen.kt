@@ -56,6 +56,15 @@ fun SettingsScreen(
             )
         }
 
+        Spacer(modifier = Modifier.height(32.dp))
+
+        AssistantSettingsSection(
+            mode = uiState.assistantMode,
+            device = uiState.device,
+            onModeSelected = viewModel::setAssistantMode,
+            onCheckDevice = viewModel::checkDevice
+        )
+
         Spacer(modifier = Modifier.height(24.dp))
     }
 }
