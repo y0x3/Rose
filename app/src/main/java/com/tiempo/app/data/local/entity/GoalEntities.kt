@@ -1,5 +1,6 @@
 package com.tiempo.app.data.local.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -15,12 +16,12 @@ data class GoalEntity(
     val note: String?,
     val color: Int,
     val frequency: FrequencyType,
-    val daysOfWeekMask: Int,          // bit 0 = lunes ... bit 6 = domingo
+    val daysOfWeekMask: Int,
     val dayOfMonth: Int?,
     val interval: Int,
     val startEpochDay: Long,
     val endEpochDay: Long?,
-    val timeMinutes: Int,             // minutos desde las 00:00 (8:30 = 510)
+    val timeMinutes: Int,
     val alertType: AlertType,
     val soundUri: String?,
     val archived: Boolean
@@ -43,5 +44,7 @@ data class GoalCompletionEntity(
     val goalId: Long,
     val dateEpochDay: Long,
     val status: CompletionStatus,
-    val completedAtMillis: Long
+    val completedAtMillis: Long,
+    @ColumnInfo(defaultValue = "''") val goalTitle: String = "",
+    @ColumnInfo(defaultValue = "0") val goalColor: Int = 0
 )

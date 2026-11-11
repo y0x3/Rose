@@ -119,7 +119,7 @@ fun GoalsScreen(
             },
             onDelete = if (current != null) {
                 { _: Goal ->
-                    viewModel.delete(current.id)
+                    viewModel.archive(current.id)
                     editorOpen = false
                 }
             } else null

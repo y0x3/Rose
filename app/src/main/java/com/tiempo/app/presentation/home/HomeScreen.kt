@@ -1,158 +1,157 @@
 package com.tiempo.app.presentation.home
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.tiempo.app.R
-import com.tiempo.app.domain.model.UserProfile
-import com.tiempo.app.presentation.common.formatAsLongDate
-import com.tiempo.app.presentation.common.formatAsTime
+import java.time.LocalTime
+import kotlin.random.Random
+import kotlinx.coroutines.delay
+
+private val prompts = listOf(
+    "¿Qué puedo hacer por ti?",
+    "¿Cómo va el día?",
+    "¿Quieres agregar una nueva meta?",
+    "¿Anoto algo en tu diario?"
+)
+
+private fun greetingFor(hour: Int): String = when (hour) {
+    in 5..11 -> "Buenos días"
+    in 12..18 -> "Buenas tardes"
+    else -> "Buenas noches"
+}
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val greeting = remember { greetingFor(LocalTime.now().hour) }
+    var promptIndex by remember { mutableIntStateOf(Random.nextInt(prompts.size)) }
+
+    // Cambia el mensaje cada 8 s mientras no se esté escuchando
+    LaunchedEffect(state.listening) {
+        while (!state.listening) {
+            delay(8_000)
+            promptIndex = (promptIndex + 1) % prompts.size
+        }
+    }
+
+    val message = if (state.listening) "Te escucho…" else prompts[promptIndex]
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 24.dp, vertical = 24.dp)
+            .padding(horizontal = 24.dp, vertical = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = stringResource(R.string.home_title),
-            style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.onBackground
+            text = greeting,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary
         )
-        Text(
-            text = stringResource(R.string.home_subtitle),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(top = 4.dp)
-        )
-
-        Spacer(modifier = Modifier.height(28.dp))
-
-        val profile = uiState.profile
-        if (profile != null) {
-            ProfileCard(profile = profile)
-        } else {
+        Crossfade(targetState = message, label = "assistant-message") { text ->
             Text(
-                text = stringResource(R.string.home_loading_profile),
+                text = text,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp)
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        NextPhaseCard()
-
-        Spacer(modifier = Modifier.height(24.dp))
-    }
-}
-
-@Composable
-private fun ProfileCard(profile: UserProfile) {
-    Surface(
-        color = MaterialTheme.colorScheme.surface,
-        shape = MaterialTheme.shapes.large,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(20.dp)) {
-            Text(
-                text = stringResource(R.string.home_profile_section).uppercase(),
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.primary,
-                letterSpacing = 1.5.sp
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            ProfileStat(
-                label = stringResource(R.string.home_birth_date_label),
-                value = profile.birthDate.formatAsLongDate()
-            )
-            Spacer(modifier = Modifier.height(14.dp))
-            ProfileStat(
-                label = stringResource(R.string.home_reference_age_label),
-                value = stringResource(
-                    R.string.onboarding_reference_age_value,
-                    profile.referenceAgeYears
-                )
-            )
-            Spacer(modifier = Modifier.height(14.dp))
-            ProfileStat(
-                label = stringResource(R.string.home_rest_label),
-                value = stringResource(
-                    R.string.home_rest_value,
-                    profile.sleepTime.formatAsTime(),
-                    profile.wakeTime.formatAsTime()
-                )
-            )
-            Spacer(modifier = Modifier.height(18.dp))
-            Text(
-                text = stringResource(R.string.home_estimate_notice),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            AssistantButton(listening = state.listening, onClick = viewModel::onMicTap)
         }
-    }
-}
 
-@Composable
-private fun ProfileStat(
-    label: String,
-    value: String
-) {
-    Column {
         Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
+            text = if (state.listening) "Toca para detener" else "Toca para hablar",
+            style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onBackground
-        )
+        Spacer(Modifier.height(8.dp))
     }
 }
 
 @Composable
-private fun NextPhaseCard() {
-    Surface(
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        shape = MaterialTheme.shapes.large,
-        modifier = Modifier.fillMaxWidth()
+private fun AssistantButton(listening: Boolean, onClick: () -> Unit) {
+    val pulse by rememberInfiniteTransition(label = "pulse").animateFloat(
+        initialValue = 1f,
+        targetValue = 1.04f,
+        animationSpec = infiniteRepeatable(tween(700), RepeatMode.Reverse),
+        label = "pulse-scale"
+    )
+
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxSize().padding(vertical = 16.dp),
+        contentAlignment = Alignment.Center
     ) {
-        Column(modifier = Modifier.padding(20.dp)) {
-            Text(
-                text = stringResource(R.string.home_next_section_title),
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Text(
-                text = stringResource(R.string.home_next_section_body),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(top = 4.dp)
+        // El círculo ocupa el lado menor del espacio disponible
+        val diameter = if (maxWidth < maxHeight) maxWidth else maxHeight
+
+        Box(
+            modifier = Modifier
+                .size(diameter)
+                .scale(if (listening) pulse else 1f)
+                .clip(CircleShape)
+                .background(
+                    if (listening) MaterialTheme.colorScheme.tertiary
+                    else MaterialTheme.colorScheme.primary
+                )
+                .clickable(
+                    role = Role.Button,
+                    onClickLabel = "Hablar con el asistente",
+                    onClick = onClick
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Mic,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.size(diameter / 3)
             )
         }
     }

@@ -39,12 +39,16 @@ fun GoalCompletionEntity.toDomain() = GoalCompletion(
     id = id, goalId = goalId,
     date = LocalDate.ofEpochDay(dateEpochDay),
     status = status,
-    completedAt = Instant.ofEpochMilli(completedAtMillis)
+    completedAt = Instant.ofEpochMilli(completedAtMillis),
+    goalTitle = goalTitle,
+    goalColor = goalColor
 )
 
 fun GoalCompletion.toEntity() = GoalCompletionEntity(
     id = id, goalId = goalId,
     dateEpochDay = date.toEpochDay(),
     status = status,
-    completedAtMillis = completedAt.toEpochMilli()
+    completedAtMillis = completedAt.toEpochMilli(),
+    goalTitle = goalTitle,
+    goalColor = goalColor
 )

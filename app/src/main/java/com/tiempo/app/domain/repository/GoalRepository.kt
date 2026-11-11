@@ -7,16 +7,26 @@ import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
 interface GoalRepository {
+    /** Solo metas activas (no archivadas). */
     fun observeGoals(): Flow<List<Goal>>
 
+    /** Todas las metas, incluidas las archivadas. Para el historial. */
+    fun observeAllGoals(): Flow<List<Goal>>
+
     fun observeCompletions(from: LocalDate, to: LocalDate): Flow<List<GoalCompletion>>
+
+    fun observeAllCompletions(): Flow<List<GoalCompletion>>
 
     suspend fun getGoal(id: Long): Goal?
 
     /** Devuelve el id de la meta (nuevo o existente). */
     suspend fun saveGoal(goal: Goal): Long
 
+    /** Borrado definitivo: también elimina su historial. */
     suspend fun deleteGoal(id: Long)
+
+    /** Oculta la meta y conserva su historial. */
+    suspend fun archiveGoal(id: Long)
 
     suspend fun setCompletion(goalId: Long, date: LocalDate, status: CompletionStatus)
 

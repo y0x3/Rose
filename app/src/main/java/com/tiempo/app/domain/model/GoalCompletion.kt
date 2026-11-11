@@ -8,5 +8,7 @@ data class GoalCompletion(
     val goalId: Long,
     val date: LocalDate,
     val status: CompletionStatus,
-    val completedAt: Instant
+    val completedAt: Instant,
+    val goalTitle: String = "",
+    val goalColor: Int = 0
 )

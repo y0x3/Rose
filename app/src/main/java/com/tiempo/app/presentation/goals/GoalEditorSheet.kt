@@ -276,7 +276,7 @@ fun GoalEditorSheet(
                 TextButton(
                     onClick = { showDeleteConfirm = true },
                     modifier = Modifier.fillMaxWidth()
-                ) { Text("Eliminar meta", color = MaterialTheme.colorScheme.error) }
+                ) { Text("Archivar meta", color = MaterialTheme.colorScheme.error) }
             }
         }
     }
@@ -323,11 +323,11 @@ fun GoalEditorSheet(
     if (showDeleteConfirm && goal != null && onDelete != null) {
         AlertDialog(
             onDismissRequest = { showDeleteConfirm = false },
-            title = { Text("¿Eliminar meta?") },
-            text = { Text("Se borrarán también todos sus cumplimientos. No se puede deshacer.") },
+            title = { Text("¿Archivar meta?") },
+            text = { Text("La meta dejará de aparecer y de avisar, pero su historial se conserva.") },
             confirmButton = {
                 TextButton(onClick = { showDeleteConfirm = false; onDelete(goal) }) {
-                    Text("Eliminar", color = MaterialTheme.colorScheme.error)
+                    Text("Archivar", color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {

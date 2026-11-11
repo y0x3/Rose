@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.tiempo.app.domain.model.Goal
 import com.tiempo.app.domain.model.GoalOccurrence
 import com.tiempo.app.domain.model.OccurrenceStatus
+import com.tiempo.app.domain.usecase.ArchiveGoalUseCase
 import com.tiempo.app.domain.usecase.CompleteGoalUseCase
-import com.tiempo.app.domain.usecase.DeleteGoalUseCase
 import com.tiempo.app.domain.usecase.ObserveDayGoalsUseCase
 import com.tiempo.app.domain.usecase.SaveGoalUseCase
 import com.tiempo.app.domain.usecase.UndoCompletionUseCase
@@ -38,7 +38,7 @@ class GoalsViewModel @Inject constructor(
     private val completeGoal: CompleteGoalUseCase,
     private val undoCompletion: UndoCompletionUseCase,
     private val saveGoalUseCase: SaveGoalUseCase,
-    private val deleteGoalUseCase: DeleteGoalUseCase,
+    private val archiveGoalUseCase: ArchiveGoalUseCase,
     private val scheduler: GoalAlarmScheduler,
     private val notifier: GoalNotifier,
     private val clock: Clock
@@ -82,11 +82,12 @@ class GoalsViewModel @Inject constructor(
         }
     }
 
-    fun delete(goalId: Long) {
+    /** Oculta la meta, cancela sus avisos y conserva su historial. */
+    fun archive(goalId: Long) {
         viewModelScope.launch {
             scheduler.cancel(goalId)
             notifier.cancel(goalId)
-            deleteGoalUseCase(goalId)
+            archiveGoalUseCase(goalId)
         }
     }
 }

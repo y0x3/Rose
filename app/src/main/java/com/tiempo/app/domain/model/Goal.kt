@@ -26,9 +26,14 @@ data class Goal(
     val archived: Boolean = false
 )
 
-/** ¿Esta meta toca en [date]? Las ocurrencias se calculan, no se guardan. */
-fun Goal.occursOn(date: LocalDate): Boolean {
-    if (archived) return false
+/** ¿Esta meta toca en [date]? Las metas archivadas nunca tocan (se usa en Goals y avisos). */
+fun Goal.occursOn(date: LocalDate): Boolean = !archived && scheduledOn(date)
+
+/**
+ * ¿Según su calendario, esta meta tocaba en [date]? Ignora si está archivada.
+ * Lo usa el historial para mostrar días pasados de metas que ya se archivaron.
+ */
+fun Goal.scheduledOn(date: LocalDate): Boolean {
     if (date < startDate) return false
     if (endDate != null && date > endDate) return false
 

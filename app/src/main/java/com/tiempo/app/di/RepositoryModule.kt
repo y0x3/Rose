@@ -1,8 +1,10 @@
 package com.tiempo.app.di
 
 import com.tiempo.app.data.repository.GoalRepositoryImpl
+import com.tiempo.app.data.repository.JournalRepositoryImpl
 import com.tiempo.app.data.repository.UserProfileRepositoryImpl
 import com.tiempo.app.domain.repository.GoalRepository
+import com.tiempo.app.domain.repository.JournalRepository
 import com.tiempo.app.domain.repository.UserProfileRepository
 import dagger.Binds
 import dagger.Module
@@ -25,4 +27,10 @@ abstract class RepositoryModule {
     abstract fun bindGoalRepository(
         implementation: GoalRepositoryImpl
     ): GoalRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindJournalRepository(
+        implementation: JournalRepositoryImpl
+    ): JournalRepository
 }

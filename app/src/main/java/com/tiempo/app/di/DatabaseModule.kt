@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.tiempo.app.data.local.TiempoDatabase
 import com.tiempo.app.data.local.dao.GoalDao
+import com.tiempo.app.data.local.dao.JournalDao
 import com.tiempo.app.data.local.dao.UserProfileDao
 import dagger.Module
 import dagger.Provides
@@ -20,7 +21,7 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): TiempoDatabase =
         Room.databaseBuilder(context, TiempoDatabase::class.java, TiempoDatabase.NAME)
-            .addMigrations(TiempoDatabase.MIGRATION_1_2)
+            .addMigrations(TiempoDatabase.MIGRATION_1_2, TiempoDatabase.MIGRATION_2_3)
             .build()
 
     @Provides
@@ -28,4 +29,7 @@ object DatabaseModule {
 
     @Provides
     fun provideGoalDao(database: TiempoDatabase): GoalDao = database.goalDao()
+
+    @Provides
+    fun provideJournalDao(database: TiempoDatabase): JournalDao = database.journalDao()
 }
